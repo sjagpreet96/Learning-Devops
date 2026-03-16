@@ -6,7 +6,7 @@ hostname=$(hostname)
 echo "Hostname: $hostname"
 
 usr=$(whoami)
-echo"User: $usr"
+echo "User: $usr"
 
 dic=$(pwd)
 echo "Current Directory: $dic"
