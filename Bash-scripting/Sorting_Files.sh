@@ -1,25 +1,47 @@
 #!/bin/bash
-echo "Fetching the files"
 
-#function to check if directory exist already if not then create one and move the file 
+echo "Fetching the files..."
+
+# Use argument or default to current directory
+dir="${1:-.}"
+
+# Check if directory exists
+if [ ! -d "$dir" ]; then
+    echo "Directory does not exist!"
+    exit 1
+fi
+
+# Function to create folder and move file
 chk_move() {
-	local dir="$1"
-	local file="$2"
-	if [ ! -d "$dir" ]; then
-		mkdir "$dir"
-		echo "$dir created"
-	fi
-	mv "$file" "$dir"
-	echo "$file moved successfully"	
+    local folder="$1"
+    local file="$2"
+
+    if [ ! -d "$folder" ]; then
+        mkdir "$folder"
+        echo "$folder created"
+    fi
+
+    mv "$file" "$folder/"
+    echo "$file moved successfully"
 }
 
-#itreats all the files in current dir and check there extension 
+# Go to target directory
+cd "$dir" || exit
+
+# Iterate files
 for file in *; do
-	if  [ -f "$file" ]; then
-		echo "Working on $file"
-		#get file name after . from end
-		file_type="${file##*.}"
-		result=$(chk_move "$file_type" "$file")
-		echo "$result"
-	fi
+    if [ -f "$file" ]; then
+        echo "Working on $file"
+
+        # Handle files without extension
+        if [[ "$file" != *.* ]]; then
+            file_type="no_extension"
+        else
+            file_type="${file##*.}"
+        fi
+
+        chk_move "${file_type}_files" "$file"
+    fi
 done
+
+echo "Sorting completed!"
