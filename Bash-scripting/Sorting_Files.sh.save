@@ -1,0 +1,22 @@
+#!/bin/bash
+echo "Fetching the files"
+
+#function to check if directory exist already if not then create one
+
+chk_move() {
+	local dir="$1"
+	local file="$2"
+	if [ ! -d "$dir" ]; then
+		mkdir "$dir"
+	fi
+	mv "$file" "$dir"
+	
+}
+
+for file in *; do
+	if  [ -f "$file" ]; then
+		echo "Working on $file"
+		file_type="${file##*.}"
+		result=chk_move "$file_type" "$file"
+	fi
+done
