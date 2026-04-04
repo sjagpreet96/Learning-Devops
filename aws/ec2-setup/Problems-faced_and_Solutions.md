@@ -1,7 +1,7 @@
 ## Unable to Access EC2 Due to IP/Network Settings
 
 **Problem:**  
-```text
+```
   ssh: connect to host <IP address> port 22: Connection timed out
 
 **Causes:**   
