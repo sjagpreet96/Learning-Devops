@@ -30,6 +30,8 @@ You need a key pair to log into your instance securely.
 
 * **If using an existing key pair:** Ensure you have the `.pem` file accessible on your local machine.
 
+![key pair creation](./screenshots/ec23.png)
+
 ### 🛡️ Secure Your Key (Linux/Mac)
 
 SSH requires strict permissions. Run this command in your terminal to restrict access:
@@ -52,3 +54,23 @@ chmod 400 /path/to/your-key.pem
    ![Security Group Configuration](./screenshots/ec22.png)
 
 ---
+
+## 4. Connect to Your Instance 💻
+
+Once the instance is running, connect via SSH:
+
+```bash
+ssh -i /path/to/your-key.pem ubuntu@your-ec2-public-ip
+```
+Enter yes if connecting first time.
+
+![Conection](./screenshots/ec24.png)
+
+> Replace `/path/to/your-key.pem` with the path to your downloaded key and `your-ec2-public-ip` with your instance’s public IP.
+
+---
+
+
+![Conection](./screenshots/ec25.png)
+
+✅ Your Ubuntu EC2 instance is now ready! You can start deploying apps, configuring services, or installing software.
