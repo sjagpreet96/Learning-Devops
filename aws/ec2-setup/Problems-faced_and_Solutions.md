@@ -5,7 +5,7 @@
   ssh: connect to host <IP address> port 22: Connection timed out
 ```
 **Causes:**   
-  Security group rules blocking your current IP because the IP address in the security group changed.  
+  Security group rules blocking current IP because the IP address in the security group changed.  
 
 
 **Solution:**  
