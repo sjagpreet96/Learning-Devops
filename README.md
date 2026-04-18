@@ -1,115 +1,74 @@
-# 🚀 Django CI/CD Deployment Project
+# Learning DevOps
 
-This project demonstrates an end-to-end DevOps workflow for deploying a Django web application using CI/CD pipelines, reverse proxy configuration, and AWS cloud services.
+This repository documents my hands-on DevOps learning journey in public. It is structured as a portfolio of notes, configurations, and deployment projects that show how I am building practical experience with Linux, AWS, web infrastructure, and automation.
 
----
+The goal of this repository is straightforward:
 
-# 📌 Project Overview
+- build real projects instead of only studying theory
+- document what I learned clearly
+- keep a public record of troubleshooting and improvements
+- create a body of work I can share with employers and on LinkedIn
 
-This project showcases the deployment of a Django application using a production-like environment with:
+## What This Repository Contains
 
-- CI/CD automation using Jenkins
-- Reverse proxy using Nginx
-- Cloud storage for static/media files using AWS S3
-- Managed database using AWS RDS
-- Deployment on AWS EC2
+This repository is organized by topic and project:
 
-The goal of this project is to simulate a real-world production deployment pipeline.
+- `aws/` - AWS-related learning and infrastructure notes
+- `linux/` - Linux commands, setup steps, and administration practice
+- `nginx/` - Nginx concepts and configuration work
+- `bash-scripting/` - shell scripting practice and examples
+- `projects/` - end-to-end projects that combine multiple DevOps tools and services
 
----
+## Featured Project
 
-# 🏗️ System Architecture
+### Django SaaS Deployment on AWS
 
-User → Nginx → Gunicorn → Django Application
-                     ↓
-                AWS RDS (Database)
-                     ↓
-                AWS S3 (Static/Media Files)
-                     ↓
-              Jenkins (CI/CD Pipeline)
+My first major project is a deployment-focused case study for a Django multi-tenant application. It includes:
 
----
+- application hosting on AWS EC2
+- PostgreSQL on AWS RDS
+- static and media file storage with AWS S3
+- Nginx as a reverse proxy
+- deployment scripts and troubleshooting notes
+- Jenkins integration planned as the next phase
 
-# ⚙️ Tech Stack
+Project link:
 
-- Backend: Django (Python Web Framework)
-- CI/CD: Jenkins
-- Web Server / Reverse Proxy: Nginx
-- Application Server: Gunicorn
-- Cloud Platform: AWS (EC2, S3, RDS)
-- OS: Ubuntu Linux
-- Version Control: Git & GitHub
+- [`projects/django-saas-ci-cd-deployment/`](./projects/django-saas-ci-cd-deployment)
 
----
+## Current Focus
 
-# 🔄 CI/CD Pipeline Workflow
+I am currently extending this project by adding Jenkins-based CI/CD. The design goal is to run Jenkins on a separate EC2 instance from the Django application server so the setup reflects a more realistic production-style architecture.
 
-1. Code is pushed to GitHub repository
-2. Jenkins detects the changes and triggers a build
-3. Jenkins performs:
-   - Install dependencies
-   - Run migrations
-   - Collect static files
-   - Health checks
-4. Deploys on EC2
-5. Restarts Gunicorn
-6. Nginx serves application
+## Why I Am Documenting This Publicly
 
----
+I am learning in public to make my progress visible and accountable. This repository serves as:
 
-# 🌐 Deployment Details
+- a learning log for myself
+- a technical portfolio for job applications
+- a reference I can share with recruiters, hiring managers, and the DevOps community
 
-## EC2 Setup
-- Ubuntu AWS EC2 instance used for hosting
+## What I Am Practicing
 
-## Nginx
-- Reverse proxy to Gunicorn
+Across this repository, I am focusing on:
 
-## Database
-- AWS RDS PostgreSQL
+- Linux server administration
+- AWS services and networking fundamentals
+- reverse proxy and web server configuration
+- application deployment and operations
+- CI/CD concepts and tooling
+- troubleshooting and clear technical documentation
 
-## Static Files
-- AWS S3 storage
+## Next Steps
 
----
+The next areas I plan to add or improve are:
 
-# 🔐 Security
+- Jenkins pipeline automation
+- stronger deployment documentation
+- containerization with Docker
+- infrastructure as code with Terraform
+- monitoring and observability basics
 
-- Environment variables used for secrets
-- No credentials stored in repo
-- Jenkins credentials for pipeline
-- AWS IAM roles (if configured)
+## About This Repository
 
----
-
-# ⚠️ Challenges Faced
-
-- Nginx 502 errors
-- Static files not loading from S3
-- Jenkins permission issues
-- RDS connection security groups
-
----
-
-# 📈 Key Learnings
-
-- CI/CD with Jenkins
-- Production Django deployment
-- Nginx reverse proxy
-- AWS EC2, S3, RDS integration
-- Debugging deployment issues
-
----
-
-# 🎯 Future Improvements
-
-- Docker containerization
-- Kubernetes deployment
-- Terraform IaC
-- Monitoring (Prometheus/Grafana)
-
----
-
-# 👨‍💻 Author
-
-DevOps Learning Project
+This is an active learning repository, so content will continue to evolve as I build new projects and refine existing ones.

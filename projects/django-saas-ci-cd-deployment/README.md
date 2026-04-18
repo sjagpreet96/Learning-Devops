@@ -1,91 +1,130 @@
-# Django SaaS CI/CD Deployment
+# Django SaaS Deployment on AWS
 
-## Executive Summary
+This project documents my first end-to-end DevOps deployment for a Django multi-tenant application. The objective was to deploy the application in a production-style environment, connect it to managed AWS services, configure a reverse proxy, and document the issues encountered along the way.
 
-This repository presents a production-grade deployment of a Django-based SaaS application leveraging AWS infrastructure and Linux tooling. The implementation demonstrates a full-stack DevOps workflow with application hosting on EC2, reverse proxy configuration with Nginx, persistent storage in AWS S3, managed database services through AWS RDS, and a planned Jenkins CI/CD pipeline.
+It is part of my public DevOps learning portfolio and is written to demonstrate both technical implementation and problem-solving.
 
-## Key Technologies
+## Project Goals
 
-- Django
-- AWS EC2
-- AWS S3
-- AWS RDS
-- Nginx
-- Gunicorn / uWSGI
-- Linux shell scripting
-- GitHub version control
-- Jenkins (planned CI/CD)
+This project was built to practice:
 
-## Solution Architecture
+- deploying a Django application on Linux
+- configuring Nginx as a reverse proxy
+- connecting Django to AWS RDS
+- storing static and media files in AWS S3
+- documenting deployment issues and fixes clearly
+- preparing for CI/CD with Jenkins as the next phase
 
-- `EC2` serves as the application host for the Django service.
-- `Nginx` functions as a reverse proxy and static content handler.
-- `AWS S3` is used for durable storage of static and media assets.
-- `AWS RDS` provides a managed relational database backend.
-- `GitHub` is used for source control and repository documentation.
+## Architecture
 
-## Implementation Summary
+Current deployment flow:
 
-- Provisioned a Linux EC2 instance for application deployment.
-- Configured Nginx to proxy HTTP traffic to the Django application server.
-- Integrated the Django application with AWS RDS for persistent data storage.
-- Configured AWS S3 for static and media file handling.
-- Documented deployment procedures and operational troubleshooting.
-- Verified networking, security group rules, and application availability.
+```text
+User -> Nginx -> Gunicorn -> Django application
+                            |
+                            +-> AWS RDS (database)
+                            +-> AWS S3 (static and media files)
+```
+
+Planned CI/CD extension:
+
+```text
+GitHub -> Jenkins on separate EC2 -> deploy/update Django app EC2
+```
+
+## Stack
+
+- `Django` for the application
+- `Gunicorn` as the application server
+- `Nginx` as the reverse proxy
+- `AWS EC2` for application hosting
+- `AWS RDS` for the managed relational database
+- `AWS S3` for static and media storage
+- `Ubuntu` as the server operating system
+- `GitHub` for version control
+- `Jenkins` planned for CI/CD automation
+
+## What This Project Covers
+
+This project includes:
+
+- deploying a Django application on an EC2 instance
+- configuring Nginx to serve as the public entry point
+- connecting the application to an RDS database
+- integrating S3 for file storage
+- organizing deployment-related scripts and configuration files
+- documenting real deployment problems and their solutions
 
 ## Repository Structure
 
-- `jenkins/` - placeholder for Jenkins pipeline configuration and automation scripts.
-- `nginx/` - Nginx configuration files used for the deployment.
-- `scripts/` - setup and deployment scripts for EC2 instance initialization.
-- `Issues_faced/README.md` - operational issues and resolution notes.
+- `nginx/` - Nginx configuration files used for the deployment
+- `scripts/` - helper scripts for setup or deployment tasks
+- `jenkins/` - Jenkins-related work for the upcoming CI/CD stage
+- `screenshots/` - deployment and application screenshots used in documentation
+- `.env.example` - example environment variables for a safe public configuration
+- `Issues_faced/README.md` - troubleshooting notes from the project
 
-## Deployment Considerations
+## Screenshots
 
-- Ensure the EC2 security group permits inbound HTTP/HTTPS and SSH traffic.
-- Enable the active Nginx site configuration by linking from `sites-available` to `sites-enabled`.
-- Use `python manage.py migrate --run-syncdb` when database migrations do not create schema objects automatically.
-- Validate browser access using the correct protocol (HTTP or HTTPS) for the service.
-- Confirm that GitHub access tokens include repository permissions for source checkout.
+The following screenshots capture parts of the deployment and application setup:
 
-## Operational Insights
+### Application
 
-The implementation captured several real-world deployment challenges:
+![Application screenshot 1](./screenshots/app1.png)
+![Application screenshot 2](./screenshots/app2.png)
+![Application screenshot 3](./screenshots/app3.png)
 
-- Browser access failure when HTTPS was attempted against an HTTP deployment.
-- Git clone failures caused by insufficient token permissions.
-- Python dependency installation failures resolved by installing required OS packages: `python3-dev`, `default-libmysqlclient-dev`, `build-essential`, and `pkg-config`.
-- Missing database tables resolved by using `python manage.py migrate --run-syncdb`.
-- Nginx site configuration not enabled initially; resolved by creating the symlink to `sites-enabled`.
+### Deployment and Troubleshooting
 
-## Next Phase: Jenkins CI/CD
+![Gunicorn status](./screenshots/gunicorn.png)
+![Nginx homepage](./screenshots/nginx_homepage.png)
+![Nginx status](./screenshots/nginx_status.png)
+![Nginx configuration](./screenshots/nginx_config.png)
+![Open ports](./screenshots/ports.png)
+![Migration issue](./screenshots/migrations.png)
+![Dependency build error](./screenshots/build_wheel_error.png)
+![GitHub access error](./screenshots/github_access_error.png)
 
-Planned Jenkins automation will cover:
+## Key Learning Outcomes
 
-- source checkout from GitHub
-- dependency installation
-- Django database migrations
-- test execution
-- deployment to EC2
-- application restart and verification
+Through this project, I gained practical experience with:
 
-## Presentation for Stakeholders
+- Linux-based application deployment
+- reverse proxy configuration and web traffic flow
+- AWS networking and service integration
+- externalizing storage and database dependencies
+- debugging deployment and environment issues
+- writing technical documentation that explains both process and outcomes
 
-This repository can be presented as a documented DevOps deployment case study that highlights:
+## Challenges Encountered
 
-- AWS infrastructure deployment
-- Django production deployment with Nginx
-- AWS S3 and RDS integration
-- troubleshooting and operational resilience
-- roadmap for Jenkins-based CI/CD automation
+Some of the issues I ran into during this project included:
 
-## Usage Guide
+- browser requests opening with HTTPS when the server was configured only for HTTP
+- repository clone failures caused by incorrect token permissions
+- dependency installation failures caused by missing system packages
+- missing database tables after migrations
+- Nginx configuration changes not taking effect because the site was not enabled correctly
 
-1. Review the Nginx configuration files in `nginx/`.
-2. Review EC2 setup and deployment scripts in `scripts/`.
-3. Review operational issue resolution in `Issues_faced/README.md`.
-4. Add Jenkins pipeline artifacts in `jenkins/` as CI/CD automation is implemented.
+Detailed notes are available here:
 
----
+- [`Issues_faced/README.md`](./Issues_faced/README.md)
 
-Recommended LinkedIn summary: "Deployed a Django SaaS application on AWS using EC2, Nginx, S3, and RDS, with documented deployment practices and a roadmap for Jenkins CI/CD."
+## Security and Good Practices
+
+While working on this deployment, I focused on basic operational discipline:
+
+- avoiding hardcoded secrets in the repository
+- using environment variables for sensitive settings
+- managing access through AWS security groups and permissions
+- separating infrastructure responsibilities across services
+
+The shared version of `settings.py` is now sanitized for public use and expects sensitive values such as the Django secret key, database credentials, AWS configuration, and third-party API keys to be provided through environment variables.
+
+## Next Phase
+
+The next step is to implement Jenkins-based CI/CD with Jenkins running on a separate EC2 instance from the Django application server. This will make the project closer to a realistic multi-server deployment workflow and strengthen the automation side of the case study.
+
+## Purpose of This Project
+
+This project is intended to show how I approach learning DevOps: by building, troubleshooting, documenting, and improving real deployments in public.
