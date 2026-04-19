@@ -6,8 +6,8 @@ The goal of this repository is straightforward:
 
 - build real projects instead of only studying theory
 - document what I learned clearly
-- keep a public record of troubleshooting and improvements
-- create a body of work I can share with employers and on LinkedIn
+- keep a  record of troubleshooting and improvements
+- create a body of work I can share
 
 ## What This Repository Contains
 
@@ -39,14 +39,6 @@ Project link:
 ## Current Focus
 
 I am currently extending this project by adding Jenkins-based CI/CD. The design goal is to run Jenkins on a separate EC2 instance from the Django application server so the setup reflects a more realistic production-style architecture.
-
-## Why I Am Documenting This Publicly
-
-I am learning in public to make my progress visible and accountable. This repository serves as:
-
-- a learning log for myself
-- a technical portfolio for job applications
-- a reference I can share with recruiters, hiring managers, and the DevOps community
 
 ## What I Am Practicing
 

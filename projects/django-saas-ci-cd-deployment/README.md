@@ -55,12 +55,32 @@ This project includes:
 - organizing deployment-related scripts and configuration files
 - documenting real deployment problems and their solutions
 
+## Project Phases
+
+### Phase 1: Application Deployment
+
+Phase 1 focuses on building and deploying the application in a production-style environment. This stage includes:
+
+- deploying the Django application on EC2
+- configuring Gunicorn and Nginx
+- connecting the application to AWS RDS
+- storing static and media files in AWS S3
+
+### Phase 2: Jenkins CI/CD
+
+Phase 2 will extend the project by adding CI/CD automation with Jenkins. The planned setup is:
+
+- Jenkins running on a separate EC2 instance
+- GitHub as the source trigger for pipeline runs
+- automated deployment updates for the Django application server
+
 ## Repository Structure
 
 - `nginx/` - Nginx configuration files used for the deployment
 - `scripts/` - helper scripts for setup or deployment tasks
 - `jenkins/` - Jenkins-related work for the upcoming CI/CD stage
 - `screenshots/` - deployment and application screenshots used in documentation
+- `settings.py` - Django configuration showing the deployment setup
 - `.env.example` - example environment variables for a safe public configuration
 - `Issues_faced/README.md` - troubleshooting notes from the project
 
@@ -72,18 +92,14 @@ The following screenshots capture parts of the deployment and application setup:
 
 ![Application screenshot 1](./screenshots/app1.png)
 ![Application screenshot 2](./screenshots/app2.png)
-![Application screenshot 3](./screenshots/app3.png)
 
-### Deployment and Troubleshooting
+### Deployment Evidence
 
 ![Gunicorn status](./screenshots/gunicorn.png)
+![RDS instance screenshot 1](./screenshots/rds1.png)
+![RDS instance screenshot 2](./screenshots/rds2.png)
+![Files stored in S3](./screenshots/files_in_s3.png)
 ![Nginx homepage](./screenshots/nginx_homepage.png)
-![Nginx status](./screenshots/nginx_status.png)
-![Nginx configuration](./screenshots/nginx_config.png)
-![Open ports](./screenshots/ports.png)
-![Migration issue](./screenshots/migrations.png)
-![Dependency build error](./screenshots/build_wheel_error.png)
-![GitHub access error](./screenshots/github_access_error.png)
 
 ## Key Learning Outcomes
 
@@ -103,6 +119,7 @@ Some of the issues I ran into during this project included:
 - browser requests opening with HTTPS when the server was configured only for HTTP
 - repository clone failures caused by incorrect token permissions
 - dependency installation failures caused by missing system packages
+- Django 5 S3 storage configuration issues caused by using an outdated storage syntax
 - missing database tables after migrations
 - Nginx configuration changes not taking effect because the site was not enabled correctly
 
