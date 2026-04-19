@@ -17,14 +17,10 @@ This project was built to practice:
 
 ## Architecture
 
-Current deployment flow:
+Phase 1 deployment flow:
 
-```text
-User -> Nginx -> Gunicorn -> Django application
-                            |
-                            +-> AWS RDS (database)
-                            +-> AWS S3 (static and media files)
-```
+![Current architecture](./screenshots/architecture-phase1.png)
+
 
 Planned CI/CD extension:
 
