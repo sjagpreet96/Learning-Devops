@@ -21,7 +21,7 @@ This repository is organized by topic and project:
 
 ## Featured Project
 
-### Django SaaS Deployment on AWS
+### Django SaaS Application Deployment and CI/CD Pipeline on AWS
 
 My first major project is a deployment-focused case study for a Django multi-tenant application. It includes:
 
@@ -36,10 +36,6 @@ My first major project is a deployment-focused case study for a Django multi-ten
 Project link:
 
 - [`projects/django-saas-ci-cd-deployment/`](./projects/django-saas-ci-cd-deployment)
-
-## Current Focus
-
-The current repository focus is building complete DevOps case studies that show both manual deployment fundamentals and automation. The Django AWS project now includes a second phase with Jenkins CI/CD, including automatic deployment to a development server and a manual approval step before production deployment.
 
 ## What I Am Practicing
 

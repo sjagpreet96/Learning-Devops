@@ -1,4 +1,4 @@
-# Django SaaS Deployment on AWS
+# Django SaaS Application Deployment and CI/CD Pipeline on AWS
 
 This project documents my first end-to-end DevOps deployment for a Django multi-tenant application. The objective was to deploy the application in a production-style environment, connect it to managed AWS services, configure a reverse proxy, and document the issues encountered along the way.
 
@@ -17,16 +17,17 @@ This project was built to practice:
 
 ## Architecture
 
+Overall project architecture:
+
+![Full project architecture](./screenshots/full_project.png)
+
 Phase 1 deployment flow:
 
 ![Current architecture](./screenshots/architecture-phase1.png)
 
-
 Phase 2 CI/CD flow:
 
-```text
-GitHub webhook -> Jenkins -> deploy to development server -> manual approval -> deploy to production server
-```
+![Phase 2 CI/CD workflow](./screenshots/phase2.png)
 
 ## Stack
 
@@ -39,6 +40,7 @@ GitHub webhook -> Jenkins -> deploy to development server -> manual approval -> 
 - `Ubuntu` as the server operating system
 - `GitHub` for version control
 - `Jenkins` for CI/CD automation
+- `Jenkins agents` for environment-specific deployment execution
 
 ## What This Project Covers
 
@@ -49,6 +51,7 @@ This project includes:
 - connecting the application to an RDS database
 - integrating S3 for file storage
 - automating deployment with a Jenkins pipeline triggered by GitHub webhook
+- using Jenkins agents to run deployment stages on the correct servers
 - deploying automatically to a development server and promoting to production after approval
 - organizing deployment-related scripts and configuration files
 - documenting real deployment problems and their solutions
@@ -69,6 +72,7 @@ Phase 1 focuses on building and deploying the application in a production-style 
 Phase 2 adds CI/CD automation with Jenkins. This stage includes:
 
 - triggering builds through a GitHub webhook
+- using Jenkins agents to target the correct deployment environment
 - checking out code and preparing the virtual environment
 - running Django checks and application tests
 - automatically deploying to the development server
@@ -83,6 +87,12 @@ Phase 2 adds CI/CD automation with Jenkins. This stage includes:
 - `screenshots/` - deployment and application screenshots used in documentation
 - `settings.py` - Django configuration showing the deployment setup
 - `Issues_faced/README.md` - troubleshooting notes from the project
+
+## Key Files
+
+- `jenkins/Jenkinsfile` - pipeline definition for validation and staged deployment
+- `nginx/nginx.conf` - reverse proxy configuration for serving the Django application
+- `settings.py` - Django configuration adapted for AWS services and environment-based secrets
 
 ## Screenshots
 
@@ -104,7 +114,9 @@ The following screenshots capture parts of the deployment and application setup:
 ### CI/CD Evidence
 
 ![Jenkins servers](./screenshots/servers.png)
+![Jenkins nodes](./screenshots/nodes.png)
 ![Jenkins node connected](./screenshots/node_connected.png)
+![GitHub webhook deliveries](./screenshots/github_deliv.png)
 ![Pipeline builds](./screenshots/builds.png)
 ![Manual approval step](./screenshots/user_input.png)
 ![Deployment success](./screenshots/deploy_success.png)
@@ -119,6 +131,7 @@ Through this project, I gained practical experience with:
 - externalizing storage and database dependencies
 - CI/CD pipeline design with gated production deployment
 - GitHub webhook integration with Jenkins
+- using Jenkins agents to separate deployment execution by environment
 - debugging deployment and environment issues
 - writing technical documentation that explains both process and outcomes
 
@@ -144,22 +157,11 @@ While working on this deployment, I focused on basic operational discipline:
 
 - avoiding hardcoded secrets in the repository
 - using environment variables for sensitive settings
+- passing the application `.env` file through Jenkins credentials during deployment
 - managing access through AWS security groups and permissions
 - separating infrastructure responsibilities across services
 
-The shared version of `settings.py` is now sanitized for public use and expects sensitive values such as the Django secret key, database credentials, AWS configuration, and third-party API keys to be provided through environment variables.
-
-## CI/CD Workflow
-
-The Jenkins pipeline currently follows this flow:
-
-1. A code push triggers the pipeline through a GitHub webhook.
-2. Jenkins checks out the repository.
-3. The pipeline sets up the virtual environment and installs dependencies.
-4. Django checks and tests run before deployment.
-5. The application is deployed to the development server automatically.
-6. Jenkins waits for manual approval before production release.
-7. After approval, the same deployment flow runs on the production server.
+The shared version of `settings.py` expects sensitive values such as the Django secret key, database credentials, AWS configuration, and third-party API keys to be provided through environment variables.
 
 ## Next Improvements
 
