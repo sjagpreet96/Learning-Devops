@@ -130,7 +130,6 @@ While configuring Jenkins on EC2 to clone code from GitHub, the pipeline failed 
 - `Permission denied (publickey)`
 - `error in libcrypto`
 
-![Jenkins GitHub SSH issue](../screenshots/github_key%20issue.png)
 
 ### Cause
 
@@ -176,7 +175,7 @@ I checked the file permissions first:
 Then I updated the permissions to allow the required access:
 
 ```bash
-chmod 760 .env
+sudo chmod 760 .env
 ```
 
 After fixing the permissions, Jenkins was able to place the environment file correctly during deployment.
@@ -305,6 +304,3 @@ I debugged each failure one by one and used the Jenkins build history to isolate
 
 This was an important part of the learning process because it showed how CI/CD pipelines are often built through repeated troubleshooting rather than working perfectly on the first run.
 
-## Why This File Matters
-
-Troubleshooting is a core part of DevOps work. Keeping a record of failures, root causes, and fixes helps build repeatable deployment knowledge and demonstrates practical operational thinking.

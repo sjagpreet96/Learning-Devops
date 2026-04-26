@@ -1,6 +1,6 @@
 # Django SaaS Application Deployment and CI/CD Pipeline on AWS
 
-This project documents my first end-to-end DevOps deployment for a Django multi-tenant application. The objective was to deploy the application in a production-style environment, connect it to managed AWS services, configure a reverse proxy, and document the issues encountered along the way.
+This project is an end-to-end DevOps case study for a Django multi-tenant application that I developed and deployed on AWS. It covers the full progression from manual application deployment to Jenkins-based CI/CD automation, including reverse proxy setup, managed database and storage integration, and staged releases across development and production environments.
 
 It is part of my public DevOps learning portfolio and is written to demonstrate both technical implementation and problem-solving.
 
