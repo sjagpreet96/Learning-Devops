@@ -13,7 +13,7 @@ This project was built to practice:
 - connecting Django to AWS RDS
 - storing static and media files in AWS S3
 - documenting deployment issues and fixes clearly
-- preparing for CI/CD with Jenkins as the next phase
+- building CI/CD automation with Jenkins across development and production environments
 
 ## Architecture
 
@@ -22,10 +22,10 @@ Phase 1 deployment flow:
 ![Current architecture](./screenshots/architecture-phase1.png)
 
 
-Planned CI/CD extension:
+Phase 2 CI/CD flow:
 
 ```text
-GitHub -> Jenkins on separate EC2 -> deploy/update Django app EC2
+GitHub webhook -> Jenkins -> deploy to development server -> manual approval -> deploy to production server
 ```
 
 ## Stack
@@ -38,7 +38,7 @@ GitHub -> Jenkins on separate EC2 -> deploy/update Django app EC2
 - `AWS S3` for static and media storage
 - `Ubuntu` as the server operating system
 - `GitHub` for version control
-- `Jenkins` planned for CI/CD automation
+- `Jenkins` for CI/CD automation
 
 ## What This Project Covers
 
@@ -48,6 +48,8 @@ This project includes:
 - configuring Nginx to serve as the public entry point
 - connecting the application to an RDS database
 - integrating S3 for file storage
+- automating deployment with a Jenkins pipeline triggered by GitHub webhook
+- deploying automatically to a development server and promoting to production after approval
 - organizing deployment-related scripts and configuration files
 - documenting real deployment problems and their solutions
 
@@ -64,20 +66,22 @@ Phase 1 focuses on building and deploying the application in a production-style 
 
 ### Phase 2: Jenkins CI/CD
 
-Phase 2 will extend the project by adding CI/CD automation with Jenkins. The planned setup is:
+Phase 2 adds CI/CD automation with Jenkins. This stage includes:
 
-- Jenkins running on a separate EC2 instance
-- GitHub as the source trigger for pipeline runs
-- automated deployment updates for the Django application server
+- triggering builds through a GitHub webhook
+- checking out code and preparing the virtual environment
+- running Django checks and application tests
+- automatically deploying to the development server
+- pausing for manual approval before production deployment
+- deploying to the production server after approval
 
 ## Repository Structure
 
 - `nginx/` - Nginx configuration files used for the deployment
 - `scripts/` - helper scripts for setup or deployment tasks
-- `jenkins/` - Jenkins-related work for the upcoming CI/CD stage
+- `jenkins/` - Jenkins pipeline configuration, including the deployment workflow
 - `screenshots/` - deployment and application screenshots used in documentation
 - `settings.py` - Django configuration showing the deployment setup
-- `.env.example` - example environment variables for a safe public configuration
 - `Issues_faced/README.md` - troubleshooting notes from the project
 
 ## Screenshots
@@ -97,6 +101,14 @@ The following screenshots capture parts of the deployment and application setup:
 ![Files stored in S3](./screenshots/files_in_s3.png)
 ![Nginx homepage](./screenshots/nginx_homepage.png)
 
+### CI/CD Evidence
+
+![Jenkins servers](./screenshots/servers.png)
+![Jenkins node connected](./screenshots/node_connected.png)
+![Pipeline builds](./screenshots/builds.png)
+![Manual approval step](./screenshots/user_input.png)
+![Deployment success](./screenshots/deploy_success.png)
+
 ## Key Learning Outcomes
 
 Through this project, I gained practical experience with:
@@ -105,6 +117,8 @@ Through this project, I gained practical experience with:
 - reverse proxy configuration and web traffic flow
 - AWS networking and service integration
 - externalizing storage and database dependencies
+- CI/CD pipeline design with gated production deployment
+- GitHub webhook integration with Jenkins
 - debugging deployment and environment issues
 - writing technical documentation that explains both process and outcomes
 
@@ -118,6 +132,7 @@ Some of the issues I ran into during this project included:
 - Django 5 S3 storage configuration issues caused by using an outdated storage syntax
 - missing database tables after migrations
 - Nginx configuration changes not taking effect because the site was not enabled correctly
+- webhook, Jenkins credential, environment file, and deployment permission issues during CI/CD setup
 
 Detailed notes are available here:
 
@@ -134,9 +149,25 @@ While working on this deployment, I focused on basic operational discipline:
 
 The shared version of `settings.py` is now sanitized for public use and expects sensitive values such as the Django secret key, database credentials, AWS configuration, and third-party API keys to be provided through environment variables.
 
-## Next Phase
+## CI/CD Workflow
 
-The next step is to implement Jenkins-based CI/CD with Jenkins running on a separate EC2 instance from the Django application server. This will make the project closer to a realistic multi-server deployment workflow and strengthen the automation side of the case study.
+The Jenkins pipeline currently follows this flow:
+
+1. A code push triggers the pipeline through a GitHub webhook.
+2. Jenkins checks out the repository.
+3. The pipeline sets up the virtual environment and installs dependencies.
+4. Django checks and tests run before deployment.
+5. The application is deployed to the development server automatically.
+6. Jenkins waits for manual approval before production release.
+7. After approval, the same deployment flow runs on the production server.
+
+## Next Improvements
+
+The next areas I plan to improve are:
+
+- refining the Jenkins pipeline further
+- adding stronger release validation and rollback planning
+- extending the project with containerization and infrastructure automation
 
 ## Purpose of This Project
 

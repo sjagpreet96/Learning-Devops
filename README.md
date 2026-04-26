@@ -6,8 +6,8 @@ The goal of this repository is straightforward:
 
 - build real projects instead of only studying theory
 - document what I learned clearly
-- keep a  record of troubleshooting and improvements
-- create a body of work I can share
+- keep a record of troubleshooting and improvements
+- create a body of work I can share publicly
 
 ## What This Repository Contains
 
@@ -29,8 +29,9 @@ My first major project is a deployment-focused case study for a Django multi-ten
 - PostgreSQL on AWS RDS
 - static and media file storage with AWS S3
 - Nginx as a reverse proxy
+- Jenkins-based CI/CD with GitHub webhook integration
+- staged deployment to development and production servers
 - deployment scripts and troubleshooting notes
-- Jenkins integration planned as the next phase
 
 Project link:
 
@@ -38,7 +39,7 @@ Project link:
 
 ## Current Focus
 
-I am currently extending this project by adding Jenkins-based CI/CD. The design goal is to run Jenkins on a separate EC2 instance from the Django application server so the setup reflects a more realistic production-style architecture.
+The current repository focus is building complete DevOps case studies that show both manual deployment fundamentals and automation. The Django AWS project now includes a second phase with Jenkins CI/CD, including automatic deployment to a development server and a manual approval step before production deployment.
 
 ## What I Am Practicing
 
@@ -49,13 +50,13 @@ Across this repository, I am focusing on:
 - reverse proxy and web server configuration
 - application deployment and operations
 - CI/CD concepts and tooling
+- release flow design between development and production
 - troubleshooting and clear technical documentation
 
 ## Next Steps
 
 The next areas I plan to add or improve are:
 
-- Jenkins pipeline automation
 - stronger deployment documentation
 - containerization with Docker
 - infrastructure as code with Terraform

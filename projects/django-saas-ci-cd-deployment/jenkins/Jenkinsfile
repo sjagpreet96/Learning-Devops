@@ -1,0 +1,110 @@
+pipeline
+{
+    agent { label 'DevServer' }
+
+    environment {
+        APP_DIR = '/home/ubuntu/Django-Inventory'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out code...'
+                checkout scm
+            }
+        }
+
+        stage('Setup') {
+            steps {
+                echo 'Setting up environment...'
+                sh 'if [ ! -d "venv" ]; then python3 -m venv venv; else ./venv/bin/pip install --upgrade pip; fi'
+                sh './venv/bin/pip install -r requirements.txt'
+            }
+        }
+
+        stage('Check') {
+            steps {
+                echo 'Checking code...'
+                sh './venv/bin/python manage.py check --settings=Inventory.settings_test'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                sh './venv/bin/python manage.py test stock --settings=Inventory.settings_test'
+            }
+        }
+
+        stage('Deploy to Dev') {
+            steps {
+                sh 'mkdir -p "${APP_DIR}"'
+                sh '''
+                    rsync -av --delete \
+                    --exclude="venv" \
+                    --exclude="__pycache__" \
+                    --exclude=".git" \
+                    --exclude="*.pyc" \
+                    --exclude="*.log" \
+                    --exclude="*.sqlite3" \
+                    --exclude=".env" \
+                    ./ "${APP_DIR}/"
+                '''
+                withCredentials([file(credentialsId:'django-env', variable:'DJANGO_ENV')]) {
+                    sh 'cp "$DJANGO_ENV" "${APP_DIR}/.env"'
+                }
+                sh 'if [ ! -d "$APP_DIR/venv" ]; then python3 -m venv "$APP_DIR/venv"; else "$APP_DIR/venv/bin/pip" install --upgrade pip; fi'
+                sh '"$APP_DIR/venv/bin/pip" install -r "$APP_DIR/requirements.txt"'
+                sh '''cd "${APP_DIR}" && \
+                    "$APP_DIR/venv/bin/python" manage.py migrate && \
+                    "$APP_DIR/venv/bin/python" manage.py collectstatic --noinput
+                    sudo systemctl restart gunicorn 
+                '''
+            }
+        }
+
+        stage('Deploy to Prod') {
+            agent { label 'Proserver' }
+            steps {
+                input message: 'Deploy to production?', ok: 'Deploy', submitter: 'jagpreet'
+                echo 'Checking out code for production...'
+                checkout scm
+                sh 'mkdir -p "${APP_DIR}"'
+                sh '''
+                    rsync -av --delete \
+                    --exclude="venv" \
+                    --exclude="__pycache__" \
+                    --exclude=".git" \
+                    --exclude="*.pyc" \
+                    --exclude="*.log" \
+                    --exclude="*.sqlite3" \
+                    --exclude=".env" \
+                    ./ "${APP_DIR}/"
+                '''
+                withCredentials([file(credentialsId:'django-env', variable:'DJANGO_ENV')]) {
+                    sh 'cp "$DJANGO_ENV" "${APP_DIR}/.env"'
+                }
+                sh 'if [ ! -d "$APP_DIR/venv" ]; then python3 -m venv "$APP_DIR/venv"; else "$APP_DIR/venv/bin/pip" install --upgrade pip; fi'
+                sh '"$APP_DIR/venv/bin/pip" install -r "$APP_DIR/requirements.txt"'
+                sh '''cd "${APP_DIR}" && \
+                    "$APP_DIR/venv/bin/python" manage.py migrate && \
+                    "$APP_DIR/venv/bin/python" manage.py collectstatic --noinput
+                    sudo systemctl restart gunicorn
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully'
+            archiveArtifacts artifacts: '**/*.log', allowEmptyArchive: true
+        }
+        failure {
+            echo 'Pipeline failed'
+        }
+        always {
+            echo 'Pipeline finished'
+        }
+    }
+}
