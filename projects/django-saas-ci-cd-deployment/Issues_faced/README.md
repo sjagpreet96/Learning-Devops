@@ -175,7 +175,8 @@ I checked the file permissions first:
 Then I updated the permissions to allow the required access:
 
 ```bash
-sudo chmod 760 .env
+sudo chmod 640 .env
+
 ```
 
 After fixing the permissions, Jenkins was able to place the environment file correctly during deployment.
